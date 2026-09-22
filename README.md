@@ -27,7 +27,7 @@ This project is built using a lightweight, dependency-free architecture to ensur
 ## 📂 Project Structure
 
 ```text
-📁 Website/
+📁 awd-coord/
 ├── index.html       # Landing page (Problem, Solution, Impact)
 ├── dashboard.html   # Protected live telemetry dashboard (uses <template>)
 ├── login.html       # Login page 
