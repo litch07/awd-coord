@@ -1,6 +1,6 @@
 # AWD-COORD Web Frontend
 
-<img src="logo.jpg" alt="AWD-COORD Header" width="400">
+<img src="logo.jpg" alt="AWD-COORD Header" width="200" height="200">
 
 A professional, high-performance web frontend for the **AWD-COORD (Alternate Wetting and Drying - Coordination)** network. This application serves as the user-facing portal and live telemetry dashboard for an autonomous agricultural water-management system designed to help farmers share a single pump fairly, saving 25-50% of water.
 
