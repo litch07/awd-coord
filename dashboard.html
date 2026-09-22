@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AWD-COORD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Load auth script first to protect route immediately -->
+    <script src="auth.js"></script>
+    <script>
+        requireAuth();
+    </script>
+</head>
+<body class="bg-light">
+    <header class="global-header">
+        <div class="container nav-container">
+            <a href="dashboard.html" class="brand-logo">
+                <img src="logo.jpg" alt="AWD-COORD Logo" class="nav-logo">
+                AWD-COORD
+            </a>
+            <div class="nav-actions">
+                <span class="user-pill-badge">Admin</span>
+                <button id="logout-btn" class="btn btn-outline btn-sm">Log out</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="section">
+        <div class="container fade-in-up">
+            <div class="dashboard-header">
+                <div class="live-title">
+                    <h2>Telemetry Dashboard</h2>
+                    <span class="live-indicator"></span>
+                </div>
+                <div class="dashboard-meta">
+                    <span id="last-updated" class="timestamp text-meta">Establishing connection...</span>
+                </div>
+            </div>
+            
+            <div id="dashboard-content" class="dashboard-container">
+                <!-- Skeleton Loader -->
+                <div class="skeleton-loader">
+                    <div class="skel skel-pulse skel-title"></div>
+                    <div class="pro-stats-grid mt-20">
+                        <div class="skel skel-pulse skel-box"></div>
+                        <div class="skel skel-pulse skel-box"></div>
+                        <div class="skel skel-pulse skel-box"></div>
+                        <div class="skel skel-pulse skel-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+    <script src="ui.js"></script>
+
+    <!-- Dashboard Template -->
+    <template id="dashboard-template">
+        <div class="pro-stats-grid">
+            <div class="pro-stat-box">
+                <span class="pro-stat-value" id="tpl-water-saved">0%</span>
+                <span class="pro-stat-label">Water Saved</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="tpl-water-saved-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="pro-stat-box">
+                <span class="pro-stat-value" id="tpl-awd-usage">0 L</span>
+                <span class="pro-stat-label">AWD Usage</span>
+            </div>
+            <div class="pro-stat-box">
+                <span class="pro-stat-value" id="tpl-flood-baseline">0 L</span>
+                <span class="pro-stat-label">Flood Baseline</span>
+            </div>
+            <div class="pro-stat-box" style="border-color: rgba(16, 185, 129, 0.4); background: white;">
+                <span class="pro-stat-value" id="tpl-system-status" style="font-size: 1.5rem; color: var(--color-success);">Unknown</span>
+                <span class="pro-stat-label">Active Coordinator</span>
+            </div>
+        </div>
+        
+        <h3 class="status-heading">Field Node Status</h3>
+        <div class="plot-status-grid">
+            <div class="plot-row-pro">
+                <div class="plot-info">
+                    <span class="plot-icon"><i data-lucide="sprout"></i></span>
+                    <span class="plot-name">Plot 1</span>
+                </div>
+                <span class="status-badge" id="tpl-plot1-status">--</span>
+            </div>
+            <div class="plot-row-pro">
+                <div class="plot-info">
+                    <span class="plot-icon"><i data-lucide="sprout"></i></span>
+                    <span class="plot-name">Plot 2</span>
+                </div>
+                <span class="status-badge" id="tpl-plot2-status">--</span>
+            </div>
+            <div class="plot-row-pro">
+                <div class="plot-info">
+                    <span class="plot-icon"><i data-lucide="sprout"></i></span>
+                    <span class="plot-name">Plot 3</span>
+                </div>
+                <span class="status-badge" id="tpl-plot3-status">--</span>
+            </div>
+            <div class="plot-row-pro">
+                <div class="plot-info">
+                    <span class="plot-icon"><i data-lucide="puzzle"></i></span>
+                    <span class="plot-name">Modular Node</span>
+                </div>
+                <span class="status-badge" id="tpl-modular-status">--</span>
+            </div>
+        </div>
+        
+        <div class="dashboard-footer">
+            <span>Currently Serving: <strong id="tpl-serving">None</strong></span>
+            <span>Packet ID: <span id="tpl-packet-id">--</span></span>
+        </div>
+    </template>
+</body>
+</html>

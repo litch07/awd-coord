@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | AWD-COORD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header class="global-header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="logo.jpg" alt="AWD-COORD Logo" class="nav-logo">
+                AWD-COORD
+            </a>
+            <div class="nav-auth-buttons">
+                <a href="index.html" class="btn btn-outline btn-sm">Home</a>
+                <a href="login.html" class="btn btn-primary btn-sm">Log in</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-bg-shapes">
+            <div class="auth-shape-1"></div>
+            <div class="auth-shape-2"></div>
+        </div>
+        <div class="auth-wrapper fade-in-up">
+            <div class="auth-brand">
+                <img src="logo.jpg" alt="AWD-COORD Logo" class="auth-logo">
+            </div>
+            <div class="auth-header">
+                <h2>Create an Account</h2>
+                <p>Sign up to view your field's live telemetry data.</p>
+            </div>
+            
+            <form id="register-form" class="pro-form">
+                <div id="register-error" class="error-msg hidden">Username already exists.</div>
+                <div id="register-success" class="success-msg hidden">Account created! Redirecting to login...</div>
+                
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" autocomplete="username" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" autocomplete="new-password" required placeholder="Choose a secure password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100 btn-glow">Register</button>
+            </form>
+            
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Log in</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="ui.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            redirectIfAuth();
+            
+            document.getElementById('register-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const user = document.getElementById('username').value;
+                const pass = document.getElementById('password').value;
+                
+                const errDiv = document.getElementById('register-error');
+                const sucDiv = document.getElementById('register-success');
+                
+                if (register(user, pass)) {
+                    errDiv.classList.add('hidden');
+                    sucDiv.classList.remove('hidden');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                } else {
+                    errDiv.classList.remove('hidden');
+                    sucDiv.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWD-COORD | Next-Gen Agriculture</title>
+    <meta name="description"
+        content="An autonomous network that lets farmers sharing one pump save 25-50% of their water, fairly.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+
+    <!-- Global Header -->
+    <header class="global-header">
+        <div class="container nav-container">
+            <a href="index.html" class="brand-logo">
+                <img src="logo.jpg" alt="AWD-COORD Logo" class="nav-logo">
+                AWD-COORD
+            </a>
+            <nav class="nav-links">
+                <a href="#problem" class="nav-link">The Problem</a>
+                <a href="#solution" class="nav-link">Solution</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#impact" class="nav-link">Impact</a>
+            </nav>
+            <div class="nav-auth-buttons">
+                <a href="login.html" class="btn btn-outline btn-sm">Log in</a>
+                <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="section bg-dark text-white hero-pattern fade-in-up">
+            <div class="container hero-split">
+                <div class="hero-content">
+                    <span class="hero-badge">NEXT-GEN AGRICULTURE</span>
+                    <h1 class="hero-title">AWD-COORD</h1>
+                    <p class="hero-subtitle">An autonomous network that lets farmers sharing one pump save 25-50% of their water, fairly.</p>
+                    <div class="hero-cta">
+                        <a href="dashboard.html" class="btn btn-primary">Access Live Data</a>
+                        <a href="#solution" class="btn btn-outline">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-dashboard glass-card">
+                        <div class="dash-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="dash-body">
+                            <div class="dash-stat">
+                                <span class="stat-label">Water Saved</span>
+                                <span class="stat-value text-success">42%</span>
+                            </div>
+                            <div class="dash-stat">
+                                <span class="stat-label">Active Node</span>
+                                <span class="stat-value">Plot 2 (Irrigating)</span>
+                            </div>
+                            <div class="dash-progress">
+                                <div class="progress-fill" style="width: 42%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="problem" class="section">
+            <div class="container fade-in-up">
+                <h2 class="section-title">The Problem</h2>
+                <div class="problem-content glass-card-light">
+                    <ul class="bullet-list premium-list">
+                        <li><strong class="highlight-text text-xl">2-3m/year groundwater drop</strong> in regions
+                            over-relying on continuous flooding.</li>
+                        <li><strong>AWD adoption failure:</strong> Farmers sharing a single pump cannot adopt Alternate
+                            Wetting and Drying (AWD) because they can't coordinate schedules.</li>
+                        <li><strong>The coordination gap:</strong> Someone must decide when to pump, who gets it, and
+                            who waits, leading to conflict or defaulting back to continuous flooding.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="section bg-light relative overflow-hidden">
+            <div class="decorative-blob blob-1"></div>
+            <div class="container relative z-10 fade-in-up">
+                <h2 class="section-title text-center">The Solution</h2>
+                <div class="flow-steps">
+                    <div class="step premium-hover">
+                        <div class="step-icon glow-icon"><i data-lucide="radio"></i></div>
+                        <h3>Sense</h3>
+                        <p>Sensor nodes in each plot monitor water levels autonomously.</p>
+                    </div>
+                    <div class="step premium-hover">
+                        <div class="step-icon glow-icon"><i data-lucide="brain"></i></div>
+                        <h3>Decide</h3>
+                        <p>The central coordinator prioritizes plots based on water stress and growth stage.</p>
+                    </div>
+                    <div class="step premium-hover">
+                        <div class="step-icon glow-icon"><i data-lucide="settings"></i></div>
+                        <h3>Act</h3>
+                        <p>Valves open and the pump is triggered automatically for the priority plot.</p>
+                    </div>
+                    <div class="step premium-hover">
+                        <div class="step-icon glow-icon"><i data-lucide="droplet"></i></div>
+                        <h3>Confirm</h3>
+                        <p>Water usage is tracked and fairness credits are adjusted among farmers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="section">
+            <div class="container fade-in-up">
+                <h2 class="section-title text-center">Key Features</h2>
+                <div class="grid cards">
+                    <div class="card premium-hover glass-card-light">
+                        <div class="card-icon"><i data-lucide="clock"></i></div>
+                        <h3>Predictive Scheduling</h3>
+                        <p>Anticipates needs before critical thresholds are reached.</p>
+                    </div>
+                    <div class="card premium-hover glass-card-light">
+                        <div class="card-icon"><i data-lucide="scale"></i></div>
+                        <h3>Equity & Water-Credit</h3>
+                        <p>Ensures fair distribution of water resources across all shared plots.</p>
+                    </div>
+                    <div class="card premium-hover glass-card-light">
+                        <div class="card-icon"><i data-lucide="sprout"></i></div>
+                        <h3>Growth-Stage Aware</h3>
+                        <p>Adapts irrigation based on the crop's current growth phase and rain forecasts.</p>
+                    </div>
+                    <div class="card premium-hover glass-card-light">
+                        <div class="card-icon"><i data-lucide="shield-check"></i></div>
+                        <h3>Fail-Safe & Override</h3>
+                        <p>Shadow coordinator backup and manual override capabilities via SMS.</p>
+                    </div>
+                    <div class="card premium-hover glass-card-light">
+                        <div class="card-icon"><i data-lucide="sun"></i></div>
+                        <h3>Solar Powered</h3>
+                        <p>Energy-independent field nodes suitable for remote deployment.</p>
+                    </div>
+                    <div class="card premium-hover glass-card-light">
+                        <div class="card-icon"><i data-lucide="puzzle"></i></div>
+                        <h3>Modularity</h3>
+                        <p>Easily add or remove plots to the network dynamically.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="section bg-light">
+            <div class="container fade-in-up">
+                <div class="text-center" style="max-width: 680px; margin: 0 auto 40px auto;">
+                    <h2 class="section-title" style="margin-bottom: 12px;">Projected Impact</h2>
+                    <p class="text-meta">Quantifiable ecological and economic dividends unlocked through autonomous AWD
+                        field coordination.</p>
+                </div>
+
+                <div class="impact-grid">
+                    <!-- Water Conservation -->
+                    <div class="impact-card">
+                        <div class="impact-card-top">
+                            <div class="impact-icon-badge"><i data-lucide="droplet"></i></div>
+                            <span class="impact-badge-tag">Resource Efficiency</span>
+                        </div>
+                        <div class="impact-figure">
+                            25–50<span class="figure-unit">%</span>
+                        </div>
+                        <h3 class="impact-title">Water Saved</h3>
+                        <p class="impact-desc">
+                            Replaces wasteful continuous submergence with dynamic soil-saturation cycling, conserving
+                            millions of liters while ensuring peak crop yield.
+                        </p>
+                        <div class="impact-bottom">
+                            <span class="impact-bottom-indicator">✓ Counters 2–3m/yr aquifer drop</span>
+                        </div>
+                    </div>
+
+                    <!-- Lower Pump Fuel Costs -->
+                    <div class="impact-card">
+                        <div class="impact-card-top">
+                            <div class="impact-icon-badge"><i data-lucide="zap"></i></div>
+                            <span class="impact-badge-tag">Economic Relief</span>
+                        </div>
+                        <div class="impact-figure">
+                            <span class="currency-symbol">৳</span> 30–45<span class="figure-unit">%</span>
+                        </div>
+                        <h3 class="impact-title">Lower Pump Fuel Costs</h3>
+                        <p class="impact-desc">
+                            Coordinated queue-based dispatching eliminates idle pump cycles and slashes diesel generator
+                            consumption, directly reducing communal utility bills.
+                        </p>
+                        <div class="impact-bottom">
+                            <span class="impact-bottom-indicator">✓ Tangible farmer operating profit</span>
+                        </div>
+                    </div>
+
+                    <!-- Reduced Methane Emissions -->
+                    <div class="impact-card">
+                        <div class="impact-card-top">
+                            <div class="impact-icon-badge"><i data-lucide="sprout"></i></div>
+                            <span class="impact-badge-tag">Climate Action</span>
+                        </div>
+                        <div class="impact-figure">
+                            ↓ 40–50<span class="figure-unit">%</span>
+                        </div>
+                        <h3 class="impact-title">Reduced Methane Emissions</h3>
+                        <p class="impact-desc">
+                            Periodic aerobic field drying suppresses anaerobic methanogenic bacteria in rice roots,
+                            driving radical reductions in agricultural greenhouse gases.
+                        </p>
+                        <div class="impact-bottom">
+                            <span class="impact-bottom-indicator">✓ Verified carbon footprint cut</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="global-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Column 1: Brand & Overview -->
+                <div class="footer-col-brand">
+                    <a href="index.html" class="footer-brand">
+                        <img src="logo.jpg" alt="AWD-COORD Logo" class="footer-logo">
+                        <span>AWD-COORD</span>
+                    </a>
+                    <p class="footer-desc">
+                        An autonomous, equitable water coordination network enabling shared pump management and saving 25–50% irrigation water.
+                    </p>
+                </div>
+
+                <!-- Column 2: Platform Links -->
+                <div>
+                    <div class="footer-heading">Platform</div>
+                    <ul class="footer-links">
+                        <li><a href="login.html">Live Telemetry Dashboard</a></li>
+                        <li><a href="#problem">The Problem</a></li>
+                        <li><a href="#solution">The Solution</a></li>
+                        <li><a href="#features">Key Features</a></li>
+                        <li><a href="#impact">Projected Impact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Resources & Repository -->
+                <div>
+                    <div class="footer-heading">Resources</div>
+                    <ul class="footer-links">
+                        <li>
+                            <a href="https://github.com/litch07/awd-coord" target="_blank" rel="noopener noreferrer" class="footer-repo-link">
+                                <svg height="15" width="15" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                                </svg>
+                                <span>GitHub Repository</span>
+                            </a>
+                        </li>
+                        <li><a href="docs/Project_Document.pdf" target="_blank">Download Full Project PDF</a></li>
+                        <li><a href="#features">System Architecture</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Team & University -->
+                <div>
+                    <div class="footer-heading">Project Team</div>
+                    <div class="footer-team-card">
+                        <div class="team-name">Team PhaseShift</div>
+                        <p class="team-inst">Dept. of Computer Science & Engineering<br><strong>United International University</strong></p>
+                        <span class="competition-tag">Microcontrollers & IoT Project</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-flex">
+                    <p>&copy; 2026 AWD-COORD &bull; Team PhaseShift &bull; United International University. All rights reserved.</p>
+                    <p class="footer-subtitle-text">Microprocessors & Microcontrollers Laboratory Project</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="ui.js"></script>
+</body>
+
+</html>
