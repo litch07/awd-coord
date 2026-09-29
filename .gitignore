@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+env/
+venv/
+.env
+
+# Secrets & Credentials
+credentials*.json
+service_account*.json
+secret*.json
+
+# Data & Logs (Ignored so local test runs don't push dummy data)
+data/
+logs/
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arduino Build artifacts
+build/
+*.hex
+*.elf
+*.bin

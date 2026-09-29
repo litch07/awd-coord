@@ -1,0 +1,4 @@
+pyserial
+gspread
+google-auth
+pytest
