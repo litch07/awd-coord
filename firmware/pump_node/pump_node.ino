@@ -21,8 +21,8 @@
 // ---------- PIN MAP (verified — do not change) ----------
 #define SDA_PIN     21
 #define SCL_PIN     22
-#define MOTOR_IN1   26
-#define MOTOR_IN2   27
+#define MOTOR_IN3   26
+#define MOTOR_IN4   27
 #define RAIN_PIN    33
 #define SWITCH_PIN  25   // Failure-simulation button, LOW = engaged
 
@@ -74,10 +74,10 @@ void setup() {
   delay(2000);
   Serial.println("Starting system...");
 
-  pinMode(MOTOR_IN1, OUTPUT);
-  pinMode(MOTOR_IN2, OUTPUT);
-  digitalWrite(MOTOR_IN1, LOW);
-  digitalWrite(MOTOR_IN2, LOW);
+  pinMode(MOTOR_IN3, OUTPUT);
+  pinMode(MOTOR_IN4, OUTPUT);
+  digitalWrite(MOTOR_IN3, LOW);
+  digitalWrite(MOTOR_IN4, LOW);
 
   pinMode(SWITCH_PIN, INPUT_PULLUP);
 
@@ -143,11 +143,11 @@ void loop() {
   }
 
   if (pumpOn && !faultSimulated) {
-    digitalWrite(MOTOR_IN1, HIGH);
-    digitalWrite(MOTOR_IN2, LOW);
+    digitalWrite(MOTOR_IN3, HIGH);
+    digitalWrite(MOTOR_IN4, LOW);
   } else {
-    digitalWrite(MOTOR_IN1, LOW);
-    digitalWrite(MOTOR_IN2, LOW);
+    digitalWrite(MOTOR_IN3, LOW);
+    digitalWrite(MOTOR_IN4, LOW);
   }
 
   int rainValue = analogRead(RAIN_PIN);
