@@ -181,7 +181,7 @@ class UplinkThread(threading.Thread):
                 
             if requests:
                 self.sheet.values_batch_update({
-                    "valueInputOption": "USER_ENTERED",
+                    "valueInputOption": "RAW",
                     "data": requests
                 })
                 
@@ -211,26 +211,26 @@ def check_setup():
 
     try:
         creds = Credentials.from_service_account_file(config.SHEETS_CREDENTIALS_PATH, scopes=scopes)
-        print("✓ Credentials file found and parsed.")
+        print("[OK] Credentials file found and parsed.")
     except FileNotFoundError:
-        print(f"✗ Credentials file '{config.SHEETS_CREDENTIALS_PATH}' not found.")
+        print(f"[ERR] Credentials file '{config.SHEETS_CREDENTIALS_PATH}' not found.")
         sys.exit(1)
     except Exception as e:
-        print(f"✗ Failed to parse credentials: {e}")
+        print(f"[ERR] Failed to parse credentials: {e}")
         sys.exit(1)
         
     try:
         client = gspread.authorize(creds)
-        print("✓ Authenticated with Google.")
+        print("[OK] Authenticated with Google.")
     except Exception as e:
-        print(f"✗ Failed to authenticate: {e}")
+        print(f"[ERR] Failed to authenticate: {e}")
         sys.exit(1)
         
     try:
         sheet = client.open_by_key(config.SHEETS_SPREADSHEET_ID)
-        print("✓ Spreadsheet opened successfully.")
+        print("[OK] Spreadsheet opened successfully.")
     except Exception as e:
-        print(f"✗ Failed to open spreadsheet '{config.SHEETS_SPREADSHEET_ID}': {e}")
+        print(f"[ERR] Failed to open spreadsheet '{config.SHEETS_SPREADSHEET_ID}': {e}")
         sys.exit(1)
         
     expected_tabs = {config.SHEET_TAB_SYSTEM, config.SHEET_TAB_PLOTS, config.SHEET_TAB_MEASUREMENTS}
@@ -238,10 +238,10 @@ def check_setup():
     
     missing = expected_tabs - actual_tabs
     if missing:
-        print(f"✗ Missing expected tabs: {', '.join(missing)}")
+        print(f"[ERR] Missing expected tabs: {', '.join(missing)}")
         sys.exit(1)
         
-    print("✓ All expected tabs are present.")
+    print("[OK] All expected tabs are present.")
     print("\nSetup verification passed! No data was written.")
 
 

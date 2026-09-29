@@ -80,7 +80,7 @@
         
         <div id="offline-banner" class="hidden" style="background: var(--color-warning); color: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; text-align: center;">
             <i data-lucide="wifi-off" style="display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
-            Coordinator offline, last change seen <span id="offline-seconds">--</span> seconds ago
+            Coordinator offline, last change seen <span id="offline-seconds">--</span>
         </div>
 
         <div id="panels-container">
@@ -144,7 +144,8 @@
         
         <div class="dashboard-footer">
             <span>Link Status: <strong id="tpl-link-status">--</strong></span>
-            <span>Last Updated UTC: <span id="tpl-timestamp">--</span></span>
+            <span style="display: inline-flex; align-items: center; gap: 5px;" title="High Availability: Primary Proxy with Silent SMS Shadow Coordinator"><i data-lucide="shield-check" style="width: 14px; height: 14px; color: var(--color-success);"></i> Topology: <strong>HA (Silent Failover)</strong></span>
+            <span>Last Updated: <span id="tpl-timestamp">--</span></span>
         </div>
     </template>
 

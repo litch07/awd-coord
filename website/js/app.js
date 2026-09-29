@@ -59,7 +59,7 @@ function parseCSV(csvText) {
     const data = [];
     for (let i = 1; i < rows.length; i++) {
         // Skip empty rows (all cells empty or just one empty cell)
-        if (rows[i].length === 0 || (rows[i].length === 1 && rows[i][0].trim() === '')) continue;
+        if (rows[i].length === 0 || rows[i].every(c => c === undefined || c.trim() === '')) continue;
 
         const rowObj = {};
         headers.forEach((header, index) => {
@@ -72,15 +72,19 @@ function parseCSV(csvText) {
 
 function updateTimeAgo() {
     const timeEl = document.getElementById('last-updated');
-    if (!lastFetchTime) return;
+    if (!window.lastDataEpoch) return;
 
-    const now = new Date();
-    const diffSeconds = Math.floor((now - lastFetchTime) / 1000);
+    const nowS = Date.now() / 1000;
+    const diffSeconds = Math.max(0, Math.floor(nowS - window.lastDataEpoch));
 
     if (diffSeconds < 2) {
         timeEl.innerText = "Live";
-    } else {
+    } else if (diffSeconds < 60) {
         timeEl.innerText = `Updated ${diffSeconds}s ago`;
+    } else {
+        const m = Math.floor(diffSeconds / 60);
+        const s = diffSeconds % 60;
+        timeEl.innerText = `Updated ${m}m ${s}s ago`;
     }
 }
 
@@ -124,24 +128,23 @@ function renderDashboard(systemData, plotsData, measurementsData) {
 
     // 1. Data Age Check (Staleness)
     const updatedEpoch = parseInt(sys.updated_at_epoch_s, 10);
-
-    // Initialize or update tracking
-    if (window.lastSeenEpoch !== updatedEpoch) {
-        window.lastSeenEpoch = updatedEpoch;
-        window.lastChangeBrowserTime = Date.now();
-    }
-
-    let secondsSinceLastChange = 0;
-    if (window.lastChangeBrowserTime) {
-        secondsSinceLastChange = Math.floor((Date.now() - window.lastChangeBrowserTime) / 1000);
-    }
-
-    const isStale = window.lastChangeBrowserTime !== undefined && secondsSinceLastChange > CONFIG.STALE_AFTER_S;
+    window.lastDataEpoch = updatedEpoch;
+    
+    const ageS = Math.max(0, Date.now() / 1000 - updatedEpoch);
+    const isStale = isNaN(updatedEpoch) || ageS > CONFIG.STALE_AFTER_S;
 
     if (isStale) {
         const offlineBanner = clone.getElementById('offline-banner');
         offlineBanner.classList.remove('hidden');
-        clone.getElementById('offline-seconds').textContent = secondsSinceLastChange;
+        
+        const offlineSecs = Math.floor(ageS);
+        if (offlineSecs < 60) {
+            clone.getElementById('offline-seconds').textContent = `${offlineSecs} seconds ago`;
+        } else {
+            const m = Math.floor(offlineSecs / 60);
+            const s = offlineSecs % 60;
+            clone.getElementById('offline-seconds').textContent = `${m}m ${s}s ago`;
+        }
 
         // Grey out panels
         const panelsContainer = clone.getElementById('panels-container');
@@ -170,7 +173,7 @@ function renderDashboard(systemData, plotsData, measurementsData) {
     // Assuming mini submersible pump flows at ~0.5 Liters per second
     const estLiters = (totalSeconds * 0.5).toFixed(1);
     
-    clone.getElementById('tpl-water-pumped').textContent = estLiters + " L";
+    clone.getElementById('tpl-water-pumped').textContent = estLiters + " L (est.)";
     clone.getElementById('tpl-nodes-online').textContent = onlineNodes + " / " + (plotsData ? plotsData.length : 0);
 
     // pump on/off, a red FAULT banner when pump_fault is true
@@ -230,9 +233,6 @@ function renderDashboard(systemData, plotsData, measurementsData) {
                 badgeClass = "irrigating"; // Greenish
             }
 
-            statusBadge.textContent = statusText;
-            statusBadge.classList.add(badgeClass);
-
             // Populate the beautiful new grid UI
             plotClone.querySelector('.plot-depth').textContent = plot.depth_cm ? plot.depth_cm + ' cm' : '--';
             plotClone.querySelector('.plot-stage').textContent = plot.stage || '--';
@@ -260,6 +260,9 @@ function renderDashboard(systemData, plotsData, measurementsData) {
                 statusText = "MANUAL CONTROL";
                 badgeClass = "waiting";
             }
+
+            statusBadge.textContent = statusText;
+            statusBadge.classList.add(badgeClass);
 
             plotsContainer.appendChild(plotClone);
         });
