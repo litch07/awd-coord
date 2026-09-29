@@ -115,7 +115,8 @@ def _eligible_plots(net_state, sched: SchedulerState, now: float):
             continue
         if node.override:
             continue          # I5: never command an override plot
-        if node.depth_cm >= config.IRRIGATE_BELOW_CM:
+        needs_water = (node.depth_cm < config.IRRIGATE_BELOW_CM) or (node.soil > config.TARGET_SOIL_MOISTURE)
+        if not needs_water:
             continue          # Not dry enough yet
         
         ps = sched.plot(node_id)

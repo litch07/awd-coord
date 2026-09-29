@@ -149,6 +149,11 @@ function renderDashboard(systemData, plotsData, measurementsData) {
         panelsContainer.style.pointerEvents = 'none';
 
         if (indicator) indicator.classList.remove('active');
+        clone.getElementById('tpl-link-status').textContent = "OFFLINE";
+        clone.getElementById('tpl-link-status').style.color = "var(--color-danger)";
+    } else {
+        clone.getElementById('tpl-link-status').textContent = "ONLINE";
+        clone.getElementById('tpl-link-status').style.color = "var(--color-success)";
     }
 
     // 2. Measurements (Calculated dynamically from live telemetry)
