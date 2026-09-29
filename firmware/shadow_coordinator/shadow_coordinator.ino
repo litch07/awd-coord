@@ -40,7 +40,7 @@ bool blinkState = false;
 ShadowSyncPacket lastKnownState;
 bool hasReceivedSync = false;
 
-void onDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+void onDataSent(const wifi_tx_info_t *info, esp_now_send_status_t status) {
   if (status != ESP_NOW_SEND_SUCCESS) {
     Serial.println("[ESP-NOW] Send FAILED");
   }
