@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="website/assets/img/uiu.webp" alt="UIU Logo" width="100">
+  <img src="website/assets/logo.jpg" alt="AWD-COORD Logo" width="100">
 
   <h1>AWD-COORD System</h1>
   <p><strong>Autonomous Multi-Node Alternate Wetting and Drying (AWD) Irrigation Coordinator</strong></p>
