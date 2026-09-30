@@ -1,0 +1,6 @@
+# Ignore all files in this directory
+*
+
+# Except for the final compiled PDF and this gitignore file
+!*.pdf
+!.gitignore
