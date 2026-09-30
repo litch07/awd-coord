@@ -16,8 +16,8 @@
 #define HEARTBEAT_TIMEOUT_MS    6000
 #define SHADOW_SYNC_INTERVAL_MS 1000
 
-#define SIM800L_RX 16
-#define SIM800L_TX 17
+#define SIM800L_RX 32
+#define SIM800L_TX 33
 HardwareSerial sim800l(2);
 
 unsigned long lastFieldHeartbeat[4] = {0, 0, 0, 0};

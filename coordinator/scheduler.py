@@ -241,10 +241,14 @@ def decide(net_state, sched: SchedulerState, now: float) -> list:
     # =====================================================================
     if sched.mode == SystemMode.IDLE:
         # --- Check for manual override pumping ---
-        manual_pump_needed = any(
-            node.online and node.has_data and node.override and node.valveOpen
-            for node in net_state.field_nodes.values()
-        )
+        manual_pump_needed = False
+        for nid, node in net_state.field_nodes.items():
+            if node.online and node.has_data and node.override:
+                manual_pump_needed = True
+                if not node.valveOpen:
+                    key = f"manual_valve_open_{nid}"
+                    if not _rate_limited(sched, key, now):
+                        cmds.append({"t": "valve", "node": nid, "open": True})
 
         if manual_pump_needed and pump_available:
             if not pump.pumpOn:
@@ -272,7 +276,7 @@ def decide(net_state, sched: SchedulerState, now: float) -> list:
             return cmds   # Wait for pump to come online with data
 
         eligible = _eligible_plots(net_state, sched, now)
-        chosen = _choose_plot(eligible, now)
+        chosen = _choose_plot(eligible, sched, now)
         if chosen is None:
             return cmds   # No plot needs water right now
 

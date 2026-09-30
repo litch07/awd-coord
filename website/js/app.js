@@ -187,6 +187,26 @@ function renderDashboard(systemData, plotsData, measurementsData) {
     clone.getElementById('tpl-pump-status').textContent = sys.pump_on ? (pumpOn ? "ON" : "OFF") : "--";
     if (pumpOn) clone.getElementById('tpl-pump-status').style.color = 'var(--color-success)';
 
+    let reasonText = "System is idle";
+    const mode = sys.system_mode || "IDLE";
+    if (mode === "IRRIGATING") {
+        reasonText = `Irrigating Plot ${sys.active_plot || '?'}.`;
+    } else if (mode === "ARMING") {
+        reasonText = `Preparing to irrigate Plot ${sys.active_plot || '?'}.`;
+    } else if (mode === "WATER_CONFIRM") {
+        reasonText = `Confirming flow to Plot ${sys.active_plot || '?'}.`;
+    } else if (mode === "RESELECT_COOLDOWN") {
+        reasonText = "Cooling down before next plot selection.";
+    } else if (mode === "IDLE") {
+        if (pumpOn) reasonText = "Manual override active or shutting down.";
+        else reasonText = "All plots are hydrated. Pump is off.";
+    } else {
+        reasonText = `Status: ${mode}`;
+    }
+    
+    const reasonEl = clone.getElementById('tpl-pump-reason');
+    if (reasonEl) reasonEl.textContent = reasonText;
+
     const pumpFault = sys.pump_fault === 'TRUE';
     if (pumpFault) {
         clone.getElementById('fault-banner').classList.remove('hidden');
@@ -269,6 +289,27 @@ function renderDashboard(systemData, plotsData, measurementsData) {
 
             statusBadge.textContent = statusText;
             statusBadge.classList.add(badgeClass);
+
+            const reasonEl = plotClone.querySelector('.plot-reason');
+            if (reasonEl) {
+                if (!isOnline) {
+                    reasonEl.textContent = "Node is offline.";
+                } else if (plot.override === 'TRUE') {
+                    reasonEl.textContent = "Forced open by manual switch.";
+                } else if (valveOpen) {
+                    if (parseFloat(plot.depth_cm) < 15) {
+                        reasonEl.textContent = plot.stage === "FLOWERING" ? "Depth < 5cm (Critical Stage)" : "Depth < 15cm (Vegetative)";
+                    } else {
+                        reasonEl.textContent = "Soil is dry (Analog > 1500).";
+                    }
+                } else {
+                    if (plot.water_present === 'TRUE' || (parseFloat(plot.depth_cm) >= 15 && parseFloat(plot.soil) <= 1500)) {
+                        reasonEl.textContent = "Plot is adequately hydrated.";
+                    } else {
+                        reasonEl.textContent = "Waiting for turn in queue.";
+                    }
+                }
+            }
 
             plotsContainer.appendChild(plotClone);
         });

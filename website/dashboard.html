@@ -138,8 +138,11 @@
                                 style="font-size: 0.8rem; color: var(--color-grey); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; letter-spacing: 0.05em;">
                                 Pump Status</div>
                             <div id="tpl-pump-status"
-                                style="font-size: 1.8rem; font-weight: 800; color: var(--color-black); line-height: 1;">
+                                style="font-size: 1.8rem; font-weight: 800; color: var(--color-black); line-height: 1; margin-bottom: 8px;">
                                 --</div>
+                            <div id="tpl-pump-reason" style="font-size: 0.85rem; color: var(--color-grey); font-weight: 500; line-height: 1.3;">
+                                Waiting for data...
+                            </div>
                         </div>
                         <i data-lucide="power"
                             style="color: var(--color-black); opacity: 0.6; width: 28px; height: 28px;"></i>
@@ -233,6 +236,7 @@
                         Valve Status</div>
                     <div class="plot-valve" style="font-size: 1.3rem; font-weight: 800; color: var(--color-black);">--
                     </div>
+                    <div class="plot-reason" style="font-size: 0.75rem; color: var(--color-grey); font-weight: 500; margin-top: 4px; line-height: 1.2;"></div>
                 </div>
                 <div
                     style="background: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.04);">
