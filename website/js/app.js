@@ -81,10 +81,16 @@ function updateTimeAgo() {
         timeEl.innerText = "Live";
     } else if (diffSeconds < 60) {
         timeEl.innerText = `Updated ${diffSeconds}s ago`;
-    } else {
+    } else if (diffSeconds < 3600) {
         const m = Math.floor(diffSeconds / 60);
-        const s = diffSeconds % 60;
-        timeEl.innerText = `Updated ${m}m ${s}s ago`;
+        timeEl.innerText = `Updated ${m}m ago`;
+    } else if (diffSeconds < 86400) {
+        const h = Math.floor(diffSeconds / 3600);
+        const m = Math.floor((diffSeconds % 3600) / 60);
+        timeEl.innerText = `Updated ${h}h ${m}m ago`;
+    } else {
+        const d = Math.floor(diffSeconds / 86400);
+        timeEl.innerText = `Updated ${d} days ago`;
     }
 }
 
