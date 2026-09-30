@@ -73,3 +73,7 @@ class SerialLink:
 
     def pump(self, on):
         self._send({"t": "pump", "on": bool(on)})
+
+    def sms(self, phone, msg):
+        self._send({"t": "sms", "phone": str(phone), "msg": str(msg)})
+

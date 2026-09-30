@@ -37,6 +37,7 @@ class NetworkState:
         self.field_nodes = {}
         self.pump_node = PumpNodeState()
         self.link_lost = False
+        self.shadow_active = False
         self.seen_without_data = set()
         self.ignored_messages = 0
         self.alerts = deque(maxlen=20)
@@ -51,6 +52,8 @@ class NetworkState:
             return
             
         if t in ("ready", "error"):
+            if t == "ready" and "shadow" in msg:
+                self.shadow_active = msg.get("shadow", False)
             self.alerts.append({
                 "ts": msg.get("ts", current_time),
                 "type": t,

@@ -110,6 +110,8 @@ class IrrigationEngine:
                 self._link.valve(cmd["node"], cmd["open"])
             elif t == "pump":
                 self._link.pump(cmd["on"])
+            elif t == "sms":
+                self._link.sms(cmd["phone"], cmd["msg"])
             self._logger.log(cmd, sent=True)
             print(f"  [SENT]    {json.dumps(cmd)}")
 
@@ -233,6 +235,9 @@ def _print_status(state: NetworkState, sched: SchedulerState, dry_run: bool):
     mode_tag = "[DRY-RUN]" if dry_run else "[LIVE]"
     print(f"=== AWD-COORD Live Status {mode_tag} ===")
     print(f"Scheduler mode : {sched.mode.name}  active node: {sched.active_node}")
+    
+    shadow_tag = "ONLINE (Failover Active)" if state.shadow_active else "OFFLINE / NOT CONFIGURED"
+    print(f"Shadow Coord   : {shadow_tag}")
 
     p = state.pump_node
     p_online = "ONLINE" if p.online else "OFFLINE"

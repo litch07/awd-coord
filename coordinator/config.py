@@ -13,12 +13,16 @@ STAGE_FLOWER_MAX = 2730
 
 # AWD threshold: irrigate when depth < 15 cm. Confirm with team.
 IRRIGATE_BELOW_CM = 15.0
-TARGET_DEPTH_CM = 20.0         # UNKNOWN: stop-irrigating depth, needs a team decision
+TARGET_DEPTH_CM = 18.0         # Stop irrigating before hitting absolute max (20.0) to avoid timeout
 TARGET_SOIL_MOISTURE = 1500    # DEMO: if soil reading drops below 1500 (gets wet), stop the motor
 MAX_IRRIGATION_S = 60          # UNKNOWN: per-plot timeout, needs calibration
 
-# Rain threshold NOT calibrated yet. None = rain logic disabled.
-RAIN_WET_BELOW_RAW = None
+# Stage logic: Keep water at 5cm (don't dry to 15cm) during flowering
+SUSPEND_AWD_STAGES = ["FLOWERING"]
+CRITICAL_STAGE_IRRIGATE_BELOW_CM = 5.0
+
+# Rain threshold: Analog reading drops below this when rain is heavy
+RAIN_WET_BELOW_RAW = 2000
 
 # Priority weights, tune on the bench
 W_DEPTH_DEFICIT = 1.0
@@ -26,6 +30,17 @@ W_WAIT_TIME = 0.5
 W_EQUITY_PENALTY = 1.0
 
 SHEETS_PUSH_INTERVAL_S = 5
+
+# SMS Alerts
+# Map node_ids to specific farmer phone numbers.
+# Node 0 is the System Administrator (receives pump/system-wide faults).
+FARMER_PHONES = {
+    0: "+8801952724571", # System Admin
+    1: "+8801686805636", # Farmer for Plot 1
+    2: "+8801707236442", # Farmer for Plot 2
+    3: "+8801647775578", # Farmer for Plot 3
+    4: "+8801725758026", # Farmer for Plot 4
+}
 
 # Google Sheets Configuration
 SHEETS_CREDENTIALS_PATH = "credentials.json"

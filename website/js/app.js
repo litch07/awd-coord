@@ -129,14 +129,14 @@ function renderDashboard(systemData, plotsData, measurementsData) {
     // 1. Data Age Check (Staleness)
     const updatedEpoch = parseInt(sys.updated_at_epoch_s, 10);
     window.lastDataEpoch = updatedEpoch;
-    
+
     const ageS = Math.max(0, Date.now() / 1000 - updatedEpoch);
     const isStale = isNaN(updatedEpoch) || ageS > CONFIG.STALE_AFTER_S;
 
     if (isStale) {
         const offlineBanner = clone.getElementById('offline-banner');
         offlineBanner.classList.remove('hidden');
-        
+
         const offlineSecs = Math.floor(ageS);
         if (offlineSecs < 60) {
             clone.getElementById('offline-seconds').textContent = `${offlineSecs} seconds ago`;
@@ -169,10 +169,10 @@ function renderDashboard(systemData, plotsData, measurementsData) {
             if (!isNaN(secs)) totalSeconds += secs;
         });
     }
-    
+
     // Assuming mini submersible pump flows at ~0.5 Liters per second
     const estLiters = (totalSeconds * 0.5).toFixed(1);
-    
+
     clone.getElementById('tpl-water-pumped').textContent = estLiters + " L (est.)";
     clone.getElementById('tpl-nodes-online').textContent = onlineNodes + " / " + (plotsData ? plotsData.length : 0);
 
@@ -189,7 +189,7 @@ function renderDashboard(systemData, plotsData, measurementsData) {
     clone.getElementById('tpl-pump-voltage').textContent = sys.pump_voltage || '--';
     clone.getElementById('tpl-pump-current').textContent = sys.pump_current_ma || '--';
     clone.getElementById('tpl-pump-power').textContent = sys.pump_power_mw || '--';
-    
+
     // Format timestamp nicely to local time
     if (sys.updated_at_iso_utc) {
         const d = new Date(sys.updated_at_iso_utc);
@@ -236,7 +236,7 @@ function renderDashboard(systemData, plotsData, measurementsData) {
             // Populate the beautiful new grid UI
             plotClone.querySelector('.plot-depth').textContent = plot.depth_cm ? plot.depth_cm + ' cm' : '--';
             plotClone.querySelector('.plot-stage').textContent = plot.stage || '--';
-            
+
             const valveEl = plotClone.querySelector('.plot-valve');
             if (valveOpen) {
                 valveEl.textContent = 'OPEN';

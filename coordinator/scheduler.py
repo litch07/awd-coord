@@ -95,61 +95,38 @@ def _rate_limited(sched: SchedulerState, key: str, now: float) -> bool:
 # ---------------------------------------------------------------------------
 
 def _eligible_plots(net_state, sched: SchedulerState, now: float):
-    """
-    Return list of (node_id, PlotSchedulingState, FieldNodeState) for plots
-    eligible for irrigation this tick.
-
-    P2 rules:
-      - has_data True
-      - online True
-      - override False
-      - depth_cm < config.IRRIGATE_BELOW_CM
-
-    P3 hooks present as comments (growth-stage, rain).
-    """
     eligible = []
+    
+    # ===== P3: Rain hold (System-wide) =====
+    if config.RAIN_WET_BELOW_RAW is not None:
+        # Rain sensor goes LOW when wet (analog drops)
+        if net_state.pump_node.has_data and net_state.pump_node.rain < config.RAIN_WET_BELOW_RAW:
+            return []   # Rain detected: suspend irrigation for all plots
+    
     for node_id, node in net_state.field_nodes.items():
-        if not node.has_data:
-            continue          # Never irrigate without real data
-        if not node.online:
+        if not node.has_data or not node.online or node.override:
             continue
-        if node.override:
-            continue          # I5: never command an override plot
-        needs_water = (node.depth_cm < config.IRRIGATE_BELOW_CM) or (node.soil > config.TARGET_SOIL_MOISTURE)
+
+        # ===== P3: Growth-stage AWD suspension =====
+        # During critical stages (like Flowering), AWD drying is suspended
+        # and the water level is kept much higher to prevent yield loss.
+        threshold_cm = config.IRRIGATE_BELOW_CM
+        if node.stage_name in config.SUSPEND_AWD_STAGES:
+            threshold_cm = config.CRITICAL_STAGE_IRRIGATE_BELOW_CM
+
+        needs_water = (node.depth_cm < threshold_cm) or (node.soil > config.TARGET_SOIL_MOISTURE)
         if not needs_water:
-            continue          # Not dry enough yet
+            continue          
         
         ps = sched.plot(node_id)
         if now < ps.cooldown_until:
-            continue          # Still in reselect cooldown
-
-        # ===== P3 HOOK: growth-stage suspension =====
-        # Uncomment in P3 when config.SUSPEND_STAGES is defined.
-        # if node.stage_name in config.SUSPEND_STAGES:
-        #     continue
-        # ============================================
-
-        # ===== P3 HOOK: rain hold ===================
-        # Uncomment in P3 when RAIN_WET_BELOW_RAW is calibrated.
-        # if config.RAIN_WET_BELOW_RAW is not None:
-        #     if net_state.pump_node.rain < config.RAIN_WET_BELOW_RAW:
-        #         return []   # Rain detected: suspend all plots this tick
-        # ============================================
+            continue          
 
         eligible.append((node_id, sched.plot(node_id), node))
     return eligible
 
 
-def _priority_score(node_id: int, ps: PlotSchedulingState, node, now: float) -> float:
-    """
-    Scheduling priority: higher = more urgent.
-
-    score = depth_deficit * W_DEPTH_DEFICIT
-          + seconds_since_last_service * W_WAIT_TIME
-          - equity_penalty * W_EQUITY_PENALTY    (P3 HOOK, zero in P2)
-
-    Weights are named constants in config.py.
-    """
+def _priority_score(node_id: int, ps: PlotSchedulingState, node, sched: SchedulerState, now: float) -> float:
     depth_deficit  = max(0.0, config.IRRIGATE_BELOW_CM - node.depth_cm)
     service_ref    = ps.last_service_ts if ps.last_service_ts is not None else now
     seconds_since  = now - service_ref
@@ -157,20 +134,22 @@ def _priority_score(node_id: int, ps: PlotSchedulingState, node, now: float) -> 
     score = (depth_deficit * config.W_DEPTH_DEFICIT
              + seconds_since * config.W_WAIT_TIME)
 
-    # ===== P3 HOOK: equity penalty ==================
-    # fair_share_s = total_irrigated_all / num_registered_plots
-    # equity_penalty = max(0, ps.cumulative_irrigation_s - fair_share_s)
-    # score -= equity_penalty * config.W_EQUITY_PENALTY
-    # ================================================
+    # ===== P3: Equity penalty =====
+    # Ensures no single plot hogs the pump if multiple plots need water
+    num_plots = len(sched.plots)
+    if num_plots > 0:
+        total_s = sum(p.cumulative_irrigation_s for p in sched.plots.values())
+        fair_share_s = total_s / num_plots
+        equity_penalty = max(0.0, ps.cumulative_irrigation_s - fair_share_s)
+        score -= (equity_penalty * config.W_EQUITY_PENALTY)
 
     return score
 
 
-def _choose_plot(eligible, now: float):
-    """Return the (node_id, ps, node) tuple with the highest priority, or None."""
+def _choose_plot(eligible, sched: SchedulerState, now: float):
     if not eligible:
         return None
-    return max(eligible, key=lambda t: _priority_score(t[0], t[1], t[2], now))
+    return max(eligible, key=lambda t: _priority_score(t[0], t[1], t[2], sched, now))
 
 
 # ---------------------------------------------------------------------------
@@ -242,6 +221,7 @@ def decide(net_state, sched: SchedulerState, now: float) -> list:
             key_pump = "pump_off_fault"
             if not _rate_limited(sched, key_pump, now):
                 cmds.append({"t": "pump", "on": False})
+                cmds.append({"t": "sms", "phone": config.FARMER_PHONES.get(0), "msg": "AWD ALERT: Pump fault detected! Safe shutdown engaged."})
                 
             for node_id, node in net_state.field_nodes.items():
                 if not node.override:
@@ -393,6 +373,15 @@ def decide(net_state, sched: SchedulerState, now: float) -> list:
             sched.last_command_ts[f"abort_pump_{node_id}"] = now
             cmds.append({"t": "pump", "on": False})
             
+            # SMS ALERTS
+            farmer_phone = config.FARMER_PHONES.get(node_id, config.FARMER_PHONES.get(0))
+            if abort_reason == "override_engaged":
+                cmds.append({"t": "sms", "phone": farmer_phone, "msg": f"AWD ALERT: Farmer override engaged on plot {node_id}."})
+            elif abort_reason == "node_offline":
+                cmds.append({"t": "sms", "phone": farmer_phone, "msg": f"AWD ALERT: Plot {node_id} offline during irrigation!"})
+            elif abort_reason == "pump_offline":
+                cmds.append({"t": "sms", "phone": config.FARMER_PHONES.get(0), "msg": "AWD ALERT: Pump offline mid-irrigation!"})
+            
             # For override mid-irrigation, send pump off only, return to IDLE
             if node_id is not None and abort_reason != "override_engaged":
                 sched.last_command_ts[f"abort_valve_{node_id}"] = now
@@ -441,6 +430,8 @@ def decide(net_state, sched: SchedulerState, now: float) -> list:
             print(f"[!] no_water_detected for plot {node_id}. Aborting.")
             sched.last_command_ts[f"stop_pump_{node_id}"] = now
             cmds.append({"t": "pump", "on": False})
+            farmer_phone = config.FARMER_PHONES.get(node_id, config.FARMER_PHONES.get(0))
+            cmds.append({"t": "sms", "phone": farmer_phone, "msg": f"AWD ALERT: No water reached plot {node_id}! Check pipes."})
             if node_id is not None and not active_node.override:
                 sched.last_command_ts[f"stop_valve_{node_id}"] = now
                 cmds.append({"t": "valve", "node": node_id, "open": False})

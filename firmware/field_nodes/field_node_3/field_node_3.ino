@@ -99,6 +99,12 @@ void setup() {
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
     Serial.println("[ESP-NOW] Failed to add Proxy as peer.");
   }
+  
+  // Add Shadow Coordinator as a peer to guarantee failover command receipt
+  memcpy(peerInfo.peer_addr, SHADOW_MAC, 6);
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("[ESP-NOW] Failed to add Shadow as peer.");
+  }
 
   Serial.println("[ESP-NOW] Ready. Sending status + heartbeat to Proxy.\n");
 }

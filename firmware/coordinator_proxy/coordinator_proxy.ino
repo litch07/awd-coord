@@ -16,6 +16,10 @@
 #define HEARTBEAT_TIMEOUT_MS    6000
 #define SHADOW_SYNC_INTERVAL_MS 1000
 
+#define SIM800L_RX 16
+#define SIM800L_TX 17
+HardwareSerial sim800l(2);
+
 unsigned long lastFieldHeartbeat[4] = {0, 0, 0, 0};
 unsigned long lastPumpHeartbeat = 0;
 bool lastPumpOn = false;
@@ -99,6 +103,20 @@ void onDataRecv(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
   }
 }
 
+void sendSMS(const char* phone, const char* msg) {
+  sim800l.println("AT+CMGF=1");
+  delay(200);
+  sim800l.print("AT+CMGS=\"");
+  sim800l.print(phone);
+  sim800l.println("\"");
+  delay(200);
+  sim800l.print(msg);
+  delay(200);
+  sim800l.write(26); // CTRL+Z
+  
+  Serial.println("{\"t\":\"alert\",\"msg\":\"sms_queued\"}");
+}
+
 void handleSerialLine(const String &line) {
   StaticJsonDocument<256> doc;
   DeserializationError err = deserializeJson(doc, line);
@@ -131,6 +149,15 @@ void handleSerialLine(const String &line) {
     pkt.pumpOn = pumpOn;
     esp_now_send(PUMP_MAC, (uint8_t *)&pkt, sizeof(pkt));
   }
+  else if (strcmp(cmdType, "sms") == 0) {
+    const char* phone = doc["phone"];
+    const char* msg = doc["msg"];
+    if (phone && msg) {
+      sendSMS(phone, msg);
+    } else {
+      Serial.println("{\"t\":\"error\",\"msg\":\"sms_missing_args\"}");
+    }
+  }
   else {
     Serial.println("{\"t\":\"error\",\"msg\":\"unknown_command_type\"}");
   }
@@ -138,8 +165,14 @@ void handleSerialLine(const String &line) {
 
 void setup() {
   Serial.begin(115200);
+  sim800l.begin(9600, SERIAL_8N1, SIM800L_RX, SIM800L_TX);
   delay(2000); // Wait 2 seconds for Serial Monitor to catch up
   Serial.println("\n\n--- Proxy Setup Started ---");
+  
+  // Basic SIM800L init for SMS
+  sim800l.println("AT");
+  delay(500);
+  sim800l.println("AT+CMGF=1");
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect(); // Good practice for ESP-NOW in newer cores
