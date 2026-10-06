@@ -50,8 +50,12 @@ The repository contains the complete end-to-end stack:
 │   ├── index.html    # Landing & Project Info
 │   ├── dashboard.html# Live Telemetry View
 │   └── 📁 docs/      # Contains downloadable PDF project documentation
-└── 📁 docs/          # Technical specifications
-    └── SERIAL_PROTOCOL.md
+├── 📁 report/        # IEEE Conference Technical Report & LaTeX source
+│   ├── awd_coord_report.pdf
+│   └── awd_coord_report.tex
+└── 📁 docs/          # Technical specifications & templates
+    ├── SERIAL_PROTOCOL.md
+    └── AWD-COORD_Telemetry_Template.xlsx
 ```
 
 ---
