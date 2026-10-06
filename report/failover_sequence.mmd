@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    participant P as Coordinator Proxy
+    participant S as Shadow Failover
+    participant N as Pump & Field Nodes
+
+    Note over P,S: Normal Operation
+    loop Every 1000ms
+        P->>S: ESP-NOW Heartbeat (System OK)
+    end
+    
+    Note over P,S: Catastrophic Event (Server Crash / Power Loss)
+    P--xS: (Silence)
+    S->>S: 1000ms: Missed Heartbeat 1
+    S->>S: 2000ms: Missed Heartbeat 2
+    S->>S: 3000ms: Missed Heartbeat 3 (Critical Timeout!)
+    
+    Note over S,N: Independent Hardware Override Engaged
+    S->>N: Broadcast (ESP-NOW): CLOSE ALL VALVES
+    S->>N: Broadcast (ESP-NOW): KILL PUMP POWER

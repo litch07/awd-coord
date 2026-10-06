@@ -1,0 +1,14 @@
+graph TD
+    subgraph Field Node
+        ESP32_F[ESP32 Microcontroller] -->|PWM| Servo[SG90 Valve Servo]
+        ESP32_F -->|Trigger/Echo| Ultra[HC-SR04 Ultrasonic]
+        ESP32_F -->|Analog| Soil[Soil Moisture Sensor]
+    end
+
+    subgraph Pump Node
+        ESP32_P[ESP32 Microcontroller] -->|I2C| INA[INA219 Power Monitor]
+        ESP32_P -->|PWM/Dir| L298N[L298N Motor Driver]
+        L298N -->|12V DC| Pump[Water Pump]
+        ESP32_P -->|Analog| Rain[Rain Sensor]
+        ESP32_P -->|I2C| OLED[OLED Display]
+    end

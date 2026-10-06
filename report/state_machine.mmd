@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> IDLE
+    IDLE --> FAULT : Pump Jam / Rain Detected
+    IDLE --> ARMING : Plot Selected (Highest Priority Score)
+    
+    ARMING --> IDLE : Valve Failed to Open / Timeout
+    ARMING --> ACTIVE : Valve Confirmed & Settled (2.0s)
+    
+    ACTIVE --> IDLE : Target Depth Reached (Stop)
+    ACTIVE --> IDLE : No Water Detected (30s Abort)
+    ACTIVE --> IDLE : Farmer Manual Override (Abort)
+    
+    FAULT --> IDLE : Fault Cleared by Admin
